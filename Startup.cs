@@ -41,19 +41,19 @@ namespace DotNetCoreSqlDb
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
 
-            var oktaMvcOptions = new OktaMvcOptions();
-            Configuration.GetSection("Okta").Bind(oktaMvcOptions);
-            oktaMvcOptions.Scope = new List<string> { "openid", "profile", "email" };
-            oktaMvcOptions.GetClaimsFromUserInfoEndpoint = true;
+           // var oktaMvcOptions = new OktaMvcOptions();
+           // Configuration.GetSection("Okta").Bind(oktaMvcOptions);
+           // oktaMvcOptions.Scope = new List<string> { "openid", "profile", "email" };
+           // oktaMvcOptions.GetClaimsFromUserInfoEndpoint = true;
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
-            })
-            .AddCookie()
-           .AddOktaMvc(oktaMvcOptions);
+           // services.AddAuthentication(options =>
+           // {
+           //     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+           //     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+           //     options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
+           // })
+           // .AddCookie()
+           //.AddOktaMvc(oktaMvcOptions);
 
             // ... the rest of ConfigureServices
             services.AddMvc();
@@ -78,7 +78,7 @@ namespace DotNetCoreSqlDb
             }
 
             app.UseStaticFiles();
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
