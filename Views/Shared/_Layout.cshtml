@@ -52,8 +52,8 @@
                 {
                     <ul class="nav navbar-nav navbar-right">
                         <li><a asp-controller="Account" asp-action="Login">Log in with Octa</a></li>
-                        <li><a href="/.auth/login/aad">Log in with Azure AD</a></li>
-                        <li><a href="/.auth/login/google">Log in with Google</a></li>
+                        <li><a href="/.auth/login/aad?post_login_redirect_url=/Home/Index">Log in with Azure AD</a></li>
+                        <li><a href="/.auth/login/google?post_login_redirect_url=/Home/Index">Log in with Google</a></li>
                     </ul>
                 }
             </div>
