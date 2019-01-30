@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetCoreSqlDb.Controllers
@@ -30,6 +31,12 @@ namespace DotNetCoreSqlDb.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Profile()
+        {
+            return View(HttpContext.User.Claims);
         }
     }
 }

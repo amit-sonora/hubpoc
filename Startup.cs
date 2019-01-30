@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DotNetCoreSqlDb.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Okta.AspNetCore;
 
 namespace DotNetCoreSqlDb
 {
@@ -28,16 +30,33 @@ namespace DotNetCoreSqlDb
             services.AddMvc();
 
             //services.AddDbContext<MyDatabaseContext>(options =>
-                    //options.UseSqlite("Data Source=localdatabase.db"));
+            //options.UseSqlite("Data Source=localdatabase.db"));
 
             // Use SQL Database if in Azure, otherwise, use SQLite
-            if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-            services.AddDbContext<MyDatabaseContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                services.AddDbContext<MyDatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
             else
-            services.AddDbContext<MyDatabaseContext>(options =>
-            options.UseSqlite("Data Source=localdatabase.db"));
+                services.AddDbContext<MyDatabaseContext>(options =>
+                options.UseSqlite("Data Source=localdatabase.db"));
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
+
+            var oktaMvcOptions = new OktaMvcOptions();
+            Configuration.GetSection("Okta").Bind(oktaMvcOptions);
+            oktaMvcOptions.Scope = new List<string> { "openid", "profile", "email" };
+            oktaMvcOptions.GetClaimsFromUserInfoEndpoint = true;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
+            })
+            .AddCookie()
+           .AddOktaMvc(oktaMvcOptions);
+
+            // ... the rest of ConfigureServices
+            services.AddMvc();
 
 
         }
@@ -59,12 +78,12 @@ namespace DotNetCoreSqlDb
             }
 
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Todos}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
