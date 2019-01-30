@@ -35,7 +35,10 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    
+                    
                 </ul>
+
                 @if (User.Identity.IsAuthenticated)
                 {
                     <ul class="nav navbar-nav navbar-right">
@@ -48,7 +51,9 @@
                 else
                 {
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
+                        <li><a asp-controller="Account" asp-action="Login">Log in with Octa</a></li>
+                        <li><a href="/.auth/login/aad">Log in with Azure AD</a></li>
+                        <li><a href="/.auth/login/google">Log in with Google</a></li>
                     </ul>
                 }
             </div>
