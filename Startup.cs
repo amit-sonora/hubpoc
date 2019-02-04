@@ -41,33 +41,30 @@ namespace DotNetCoreSqlDb
                 options.UseSqlite("Data Source=localdatabase.db"));
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
-
-            var oktaMvcOptions = new OktaMvcOptions();
-            Configuration.GetSection("Okta").Bind(oktaMvcOptions);
-            oktaMvcOptions.Scope = new List<string> { "openid", "profile", "email" };
-            oktaMvcOptions.GetClaimsFromUserInfoEndpoint = true;
-
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OktaDefaults.MvcAuthenticationScheme;
-            })
-            .AddCookie()
-           .AddOktaMvc(oktaMvcOptions);
-            // ... the rest of ConfigureServices
-            services.AddMvc();
+        {
+            options.DefaultScheme = "cookie";
+            options.DefaultChallengeScheme = "oidc";
+        })
+            .AddCookie("cookie")
+            .AddOpenIdConnect("oidc", options =>
+       {
+           options.Authority = Configuration.GetSection("IS4").GetValue<string>("Authority");
+           options.ClientId = Configuration.GetSection("IS4").GetValue<string>("ClientId");
+           options.SignInScheme = Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
 
 
-        }
+       });
+            
+            }
+
+
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (env.IsDevelopment())
+           if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
@@ -76,10 +73,8 @@ namespace DotNetCoreSqlDb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

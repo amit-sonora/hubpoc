@@ -44,18 +44,16 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li><p class="navbar-text">Hello, @User.Identity.Name</p></li>
                         <li><a asp-controller="Home" asp-action="Profile">Profile</a></li>
-                        <li><a onclick="document.getElementById('logout_form').submit();" style="cursor: pointer;">Log out</a></li>
+                        @*<li><a onclick="document.getElementById('logout_form').submit();" style="cursor: pointer;">Log out</a></li>*@
                     </ul>
                     <form asp-controller="Account" asp-action="Logout" method="post" id="logout_form"></form>
                 }
-                else
+                @*else
                 {
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a asp-controller="Account" asp-action="Login">Log in with Octa</a></li>
-                        <li><a href="/.auth/login/aad?post_login_redirect_url=/Home/Index">Log in with Azure AD</a></li>
-                        <li><a href="/.auth/login/google?post_login_redirect_url=/Home/Index">Log in with Google</a></li>
+                        <li><a asp-controller="Account" asp-action="Login">Log in</a></li>
                     </ul>
-                }
+                }*@
             </div>
         </div>
     </nav>
