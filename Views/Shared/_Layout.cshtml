@@ -46,7 +46,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <ul class="nav navbar-nav navbar-right">
-                        <li><p class="navbar-text">Hello, @User.Identity.Name</p></li>
+                        @*<li><p class="navbar-text">Hello, @User.Identity.Name</p></li>*@
                         <li><a asp-controller="Home" asp-action="Profile">Profile</a></li>
                         @*<li><a onclick="document.getElementById('logout_form').submit();" style="cursor: pointer;">Log out</a></li>*@
                     </ul>
