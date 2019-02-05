@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "About";
+    ViewData["customerName"] = @configuration["customerName"];
 }
+
+@using Microsoft.Extensions.Configuration
+
+@inject Microsoft.Extensions.Configuration.IConfiguration configuration
+<h1>@ViewData["customerName"]</h1>
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
 
