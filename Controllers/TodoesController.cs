@@ -59,9 +59,17 @@ namespace DotNetCoreSqlDb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(todo);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if(todo.Description.Contains("Bad"))
+                {
+                    throw new Exception("Bad words are not allowed");
+                }
+                else
+                {
+                    _context.Add(todo);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
+                
             }
             return View(todo);
         }
