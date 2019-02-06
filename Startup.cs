@@ -36,24 +36,24 @@ namespace DotNetCoreSqlDb
             //options.UseSqlite("Data Source=localdatabase.db"));
 
             // Use SQL Database if in Azure, otherwise, use SQLite
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                services.AddDbContext<MyDatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
-                clientId = Configuration["clientId"];
-                authority = Configuration["authority"];
-                signInScheme = Configuration["signInScheme"];
+                //services.AddDbContext<MyDatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
+                clientId = Configuration.GetSection("IS4").GetValue<string>("ClientId");
+                authority = Configuration.GetSection("IS4").GetValue<string>("Authority");
+                signInScheme = Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
             }
 
             else
             {
-                services.AddDbContext<MyDatabaseContext>(options =>
-                options.UseSqlite("Data Source=localdatabase.db"));
-
-                clientId = Configuration.GetSection("IS4").GetValue<string>("ClientId");
-                authority = Configuration.GetSection("IS4").GetValue<string>("Authority");
-                signInScheme = Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
+                clientId = Configuration["clientId"];
+                authority = Configuration["authority"];
+                signInScheme = Configuration["signInScheme"];
 
             }
+
+            services.AddDbContext<MyDatabaseContext>(options =>
+                options.UseSqlite("Data Source=localdatabase.db"));
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
             services.AddAuthentication(options =>
