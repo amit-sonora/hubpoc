@@ -29,16 +29,31 @@ namespace DotNetCoreSqlDb
         {
             // Add framework services.
             services.AddMvc();
-
+            string clientId = string.Empty;
+            string authority = string.Empty;
+            string signInScheme = string.Empty;
             //services.AddDbContext<MyDatabaseContext>(options =>
             //options.UseSqlite("Data Source=localdatabase.db"));
 
             // Use SQL Database if in Azure, otherwise, use SQLite
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
                 services.AddDbContext<MyDatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyDbConnection")));
+                clientId = Configuration["clientId"];
+                authority = Configuration["authority"];
+                signInScheme = Configuration["signInScheme"];
+            }
+
             else
+            {
                 services.AddDbContext<MyDatabaseContext>(options =>
                 options.UseSqlite("Data Source=localdatabase.db"));
+
+                clientId = Configuration.GetSection("IS4").GetValue<string>("ClientId");
+                authority = Configuration.GetSection("IS4").GetValue<string>("Authority");
+                signInScheme = Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
+
+            }
             // Automatically perform database migration
             services.BuildServiceProvider().GetService<MyDatabaseContext>().Database.Migrate();
             services.AddAuthentication(options =>
@@ -49,9 +64,9 @@ namespace DotNetCoreSqlDb
             .AddCookie("cookie")
             .AddOpenIdConnect("oidc", options =>
        {
-           options.Authority = Configuration.GetSection("IS4").GetValue<string>("Authority");
-           options.ClientId = Configuration.GetSection("IS4").GetValue<string>("ClientId");
-           options.SignInScheme = Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
+           options.Authority = authority;// Configuration.GetSection("IS4").GetValue<string>("Authority");
+           options.ClientId = clientId;//Configuration.GetSection("IS4").GetValue<string>("ClientId");
+           options.SignInScheme = signInScheme;// Configuration.GetSection("IS4").GetValue<string>("SignInScheme");
 
 
        });
