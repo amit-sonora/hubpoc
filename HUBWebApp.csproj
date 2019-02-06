@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <ApplicationInsightsResourceId>/subscriptions/07c3d78d-4adc-40b9-bfe9-d5277bf04b89/resourcegroups/HUBPOC/providers/microsoft.insights/components/HUBPOCApplicationInsights</ApplicationInsightsResourceId>
-    <ApplicationInsightsAnnotationResourceId>/subscriptions/07c3d78d-4adc-40b9-bfe9-d5277bf04b89/resourcegroups/Default-ApplicationInsights-EastUS/providers/microsoft.insights/components/DotNetCoreSqlDb</ApplicationInsightsAnnotationResourceId>
+    <ApplicationInsightsAnnotationResourceId>/subscriptions/07c3d78d-4adc-40b9-bfe9-d5277bf04b89/resourceGroups/HUBPOC/providers/microsoft.insights/components/HUBPOCApplicationInsights</ApplicationInsightsAnnotationResourceId>
   </PropertyGroup>
 
   <ItemGroup>
