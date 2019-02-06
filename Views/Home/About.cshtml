@@ -1,12 +1,14 @@
 ﻿@{
     ViewData["Title"] = "About";
     ViewData["customerName"] = @configuration["customerName"];
+    ViewData["logoPath"] = @configuration["logoPath"];
 }
 
 @using Microsoft.Extensions.Configuration
 
 @inject Microsoft.Extensions.Configuration.IConfiguration configuration
 <h1>@ViewData["customerName"]</h1>
+<img src=@ViewData["logoPath"] asp-append-version="true" />
 <h2>@ViewData["Title"].</h2>
 <h3>@ViewData["Message"]</h3>
 
